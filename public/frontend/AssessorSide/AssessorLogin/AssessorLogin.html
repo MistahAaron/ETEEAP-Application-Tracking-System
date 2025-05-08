@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ETEEAP Tracking System - Assessor Login</title>
+  <link rel="icon" href="/Images/ifldelogo.png" type="image/x-icon">
+  <link rel="stylesheet" href="/frontend/AssessorSide/AssessorLogin/AssessorLogin.css">
+</head>
+
+<body>
+  <div class="login-page">
+    <div class="page-container">
+      <img class="background-image" src="/Images/background.png" alt="Background Image">
+
+      <header class="header-container">
+        <div class="logo-container">
+          <img class="logo-primary" src="/Images/rtulogo.png" alt="RTU Logo">
+          <img class="logo-secondary" src="/Images/ifldelogo.png" alt="IFLeD Logo">
+          <div class="header-text">
+            <div class="university-name">Rizal Technological University</div>
+            <div class="institute-name">Institute of Flexible Learning & Digital Education</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="banner-container">
+        <img class="banner-logo" src="/Images/rizal-technological-university-logo.png" alt="RTU Logo">
+        <div class="banner-text">
+          <h1 class="system-title">ETEEAP Tracking System</h1>
+          <h2 class="university-title">Rizal Technological University</h2>
+        </div>
+      </div>
+
+      <form id="assessorLoginForm" class="login-form-container">
+        <h3 class="login-heading">Assessor Login</h3>
+        
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+        </div>
+
+        <a href="../ApplicantLogIn/forgotpass.html" class="forgot-password">Forgot password?</a>
+        
+        <button type="submit" class="login-button">Login</button>
+      </form>
+    </div>
+  </div>
+  
+  <script src="/frontend/AssessorSide/AssessorLogin/AssessorLogin.js"></script>
+</body>
+</html>
