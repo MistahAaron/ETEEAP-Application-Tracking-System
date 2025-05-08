@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETEEAP Tracking System</title>
+    <link rel="stylesheet" href="login.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+
+    <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="../img/RTU Logo.png" class="logo1">
+            <img src="../img/IFLDE Logo.png" class="logo2">
+            <div class="logo-text-container">
+                <h2 class="logo-text">Rizal Technological University</h2>
+                <p class="logo-subtext">Institute of Flexible Learning & Digital Education</p>
+            </div>
+        </div>
+        <nav class="nav">
+            <ul>
+                <li><a href="../Home/index.html">Home</a></li>
+                <li><a href="../About/about.html">About Us</a></li>
+                <li><a href="../Downloads/downloads.html">Downloads</a></li>
+                <li><a href="../News/news.html">News</a></li>
+                <button class="btnLogin-popup">Login</button>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="wrapper">
+        <span class="icon-close">
+            <ion-icon name="close"></ion-icon>
+        </span>
+    
+        <!-- Login Form -->
+        <div class="form-box login">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                    <input type="email" id="loginEmail" required>
+                    <label>Email</label>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="loginPassword" required> <!-- Corrected type -->
+                    <label>Password</label>
+                    <span class="toggle-password">
+                        <ion-icon name="eye-off"></ion-icon>
+                    </span>
+                </div>
+                <div class="forgot">
+                    <a href="#" class="forgot-link">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <div class="google-btn">
+                    <button type="button" class="btn google">
+                        <img src="../img/Google Logo.png" alt="Google Logo">
+                        Continue with Google
+                    </button>
+                </div>
+                <div class="login-register">
+                    <p>Don't have an account? <a href="#" class="register-link">Register</a></p>
+                </div>
+            </form>
+        </div>
+    
+        <!-- Registration Form -->
+        <div class="form-box register">
+            <h2>Registration</h2>
+            <form id="registerForm">
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                    <input type="email" id="regEmail" required>
+                    <label>Email</label>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="regPassword" required>
+                    <label>Password</label>
+                    <span class="toggle-password">
+                        <ion-icon name="eye-off"></ion-icon>
+                    </span>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="confirmPassword" required>
+                    <label>Confirm Password</label>
+                    <span class="toggle-password">
+                        <ion-icon name="eye-off"></ion-icon>
+                    </span>
+                </div>
+                <div class="terms">
+                    <label><input type="checkbox" id="terms-checkbox"> I agree to the <a href="#" id="terms-link">terms & conditions</a></label>
+                </div>
+                <button type="submit" id="register-btn" class="btn">Register</button>
+                <div class="google-btn">
+                    <button type="button" class="btn google">
+                        <img src="../img/Google Logo.png" alt="Google Logo">
+                        Continue with Google
+                    </button>
+                </div>
+                <div class="login-register">
+                    <p>Already have an account? <a href="#" class="login-link">Login</a></p>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Terms and Conditions -->
+        <div id="terms-con" class="terms-con">
+            <div class="terms-content">
+                <h2>Terms and Conditions</h2>
+                <div class="terms-scroll">
+                    <h4>By submitting this form, you agree to the following:</h4>
+                    <p>The information provided is accurate and complete to the best of your knowledge.</p>
+                    <p>You consent to the collection and processing of your personal data for the purpose of this application</p>
+                    <p>You agree to comply with the rules and guidelines set by the Rizal Technological University and the Institute of Flexible Learning & Digital Education (IFLDE).</p>
+                    <p>You are responsible for ensuring that all documents submitted are accurate and valid.</p>
+                </div>
+                <button id="accept-btn" class="btn">Accept</button>
+            </div>
+        </div>
+    
+        <!-- Reset Password Form -->
+        <div class="form-box forgot">
+            <h2>Reset Password</h2>
+            <p>Enter the email associated with your account and we'll send an email with instructions to reset your password</p>
+            <form id="resetForm">
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                    <input type="email" required id="emailInput">
+                    <label>Email Address</label>
+                </div>
+                <button type="submit" class="btn">Send</button>
+            </form>
+        </div>
+    
+        <!-- Verification Code Form -->
+        <div id="verificationForm" class="form-box verification">
+            <h2>Verification</h2>
+            <p>Enter Verification Code</p>
+            <form id="verifyCodeForm">
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="key"></ion-icon></span>
+                    <input type="text" required id="codeInput">
+                    <label>Verification Code</label>
+                </div>
+                <div class="resend-code">
+                    <p>If you didn't receive a code! <a href="#" class="resend-code">Resend</a></p>
+                </div>
+                <button type="submit" class="btn">Verify</button>
+            </form>
+        </div>
+    
+        <!-- New Password Form -->
+        <div id="newPasswordForm" class="form-box new-password">
+            <h2>New Password</h2>
+            <form id="newPasswordSubmit">
+                <div class="input-box">
+                    <input type="password" id="newpassword" required> <!-- Corrected type -->
+                    <label>Enter New Password</label>
+                    <span class="toggle-password">
+                        <ion-icon name="eye-off"></ion-icon>
+                    </span>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="confirmNewPassword" required> <!-- Corrected type -->
+                    <label>Confirm Password</label>
+                    <span class="toggle-password">
+                        <ion-icon name="eye-off"></ion-icon>
+                    </span>
+                </div>
+                <button type="submit" class="btn">Reset Password</button>
+            </form>
+        </div>
+    </div>    
+
+    <script src="login.js"></script>
+
+    <div class="notification" id="notification" style="display: none;"></div>
+
+</body>
+</html>
