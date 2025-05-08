@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ETEEAP Tracking System</title>
+  <link rel="icon" href="/images/ifldelogo.png" type="image/x-icon">
+  <link rel="stylesheet" href="/Frontend/AdminSide/1.adminLogin/adminlogin.css"> <!-- Link to external CSS file for styling -->
+</head>
+
+<body>
+  <div class="login-page">
+    <div class="page-container">
+      <img class="background-image" src="/Frontend/img/background.png" alt="background.img" /> <!-- Background image for the page -->
+
+
+      <!-- Header Section -->
+      <header class="header-container">
+        <!-- RTU and IFLeD logos with university/institute details -->
+        <div class="logo-container">
+          <img class="logo-primary" src="/Frontend/img/RTU Logo.png" alt="RTU Logo" />
+          <img class="logo-secondary" src="/Frontend/img/IFLDE Logo.png" alt="IFLeD Logo" />
+          <div class="header-text">
+            <div class="university-name">Rizal Technological University</div>
+            <div class="institute-name">Institute of Flexible Learning & Digital Education</div>
+          </div>
+        </div>
+        <!-- Navigation menu for quick links -->
+
+      </header>
+
+      <!-- Banner Section -->
+      <div class="banner-container">
+        <img class="banner-logo" src="/Frontend/img/RTU Logo.png"  alt="ETEEAP Logo" /> <!-- RTU Banner Logo -->
+        <div class="banner-text">
+          <h1 class="system-title">ETEEAP Tracking System</h1> <!-- Main system title -->
+        </div>
+      </div>
+
+      <!-- Login Form -->
+     <!-- In your AdminLogin.html -->
+<form id="loginForm" class="login-form-container">
+  <h3 class="login-heading">Admin Login</h3>
+  
+  <!-- Email input field -->
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input type="email" id="email" class="form-input" placeholder="Enter admin email" required />
+  </div>
+
+  <!-- Password input field -->
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" id="password" class="form-input" placeholder="Enter password" required />
+  </div>
+
+  <!-- Remember me checkbox -->
+  <div class="form-group remember-me">
+    <input type="checkbox" id="remember-me" />
+    <label for="remember-me">Remember me</label>
+  </div>
+
+  <!-- Login button -->
+  <button type="submit" class="login-button">Login</button>
+
+  <!-- Error message display -->
+  <div id="error-message" class="error-message"></div>
+
+  <!-- Forgot password link -->
+  <div class="forgot-password">
+    <a href="/forgot-password">Forgot password?</a>
+  </div>
+</form>
+
+    </div>
+  </div>
+  
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const loginForm = document.getElementById('loginForm');
+  const errorMessage = document.getElementById('error-message');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const rememberMeCheckbox = document.getElementById('remember-me');
+
+  // Check if admin is already logged in
+  checkAdminAuthStatus();
+
+  // Handle form submission
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    const rememberMe = rememberMeCheckbox.checked;
+
+    // Clear previous errors
+    errorMessage.textContent = '';
+    errorMessage.style.display = 'none';
+
+    // Basic client-side validation
+    if (!email || !password) {
+      showError('Email and password are required');
+      return;
+    }
+
+    try {
+      const response = await fetch('/admin/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: 'include' // Important for cookies
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+
+      // Store email if "Remember me" is checked
+      if (rememberMe) {
+        localStorage.setItem('adminEmail', email);
+      } else {
+        localStorage.removeItem('adminEmail');
+      }
+
+      // Redirect to dashboard on successful login
+      if (data.redirectTo) {
+        window.location.href = data.redirectTo;
+      } else {
+        window.location.href = '/frontend/AdminSide/2.adminDash/admin.html';
+      }
+
+    } catch (error) {
+      showError(error.message);
+    }
+  });
+
+  // Pre-fill email if "Remember me" was checked
+  const savedEmail = localStorage.getItem('adminEmail');
+  if (savedEmail) {
+    emailInput.value = savedEmail;
+    rememberMeCheckbox.checked = true;
+  }
+
+  // Check authentication status
+  async function checkAdminAuthStatus() {
+    try {
+      const response = await fetch('/admin/auth-status', {
+        credentials: 'include'
+      });
+      
+      const data = await response.json();
+      
+      if (data.authenticated) {
+        // If already logged in, redirect to dashboard
+        window.location.href = '/frontend/AdminSide/2.adminDash/admin.html';
+      }
+    } catch (error) {
+      console.error('Auth check error:', error);
+    }
+  }
+
+  // Display error message
+  function showError(message) {
+    errorMessage.textContent = message;
+    errorMessage.style.display = 'block';
+    errorMessage.style.color = '#dc3545'; // Red color for errors
+    errorMessage.style.marginTop = '10px';
+    errorMessage.style.textAlign = 'center';
+  }
+});
+  </script>
+</body>
+</html>
