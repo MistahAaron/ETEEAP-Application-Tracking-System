@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>rtu-eteeap-admin</title>
     <link rel="icon" href="/images/ifldelogo.png" type="image/x-icon">
-    <link rel="stylesheet" href="adminUsers.css">
+    <link rel="stylesheet" href="users.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
 </head>
 <body>
@@ -13,51 +13,51 @@
     <!--Sidebar--->
     <div class="sidebar">
       <div class="logo">
-        <img src="/Frontend/AdminSide/IFLDE Logo.png" class="iflde">
+        <img src="/Frontend/Admin/IFLDE Logo.png" class="iflde">
         ETEEAP
       </div>
       <div class="nav-item" data-section="dashboard">
-        <a href="/Frontend/AdminSide/2.adminDash/admin.html">
+        <a href="../dashboard/dashboard.html">
         <i class="fas fa-chart-pie"></i>
         Dashboard
       </a>
       </div>
-      <div class="nav-item" data-section="students">
-        <a href="/Frontend/AdminSide/3.adminApp/adminApp.html">
+      <div class="nav-item" data-section="admins">
+        <a href="../applicants/applicants.html">
         <i class="fas fa-users"></i>
         Applicants
       </a>
       </div>
       <div class="nav-item" data-section="assessors">
-        <a href="/Frontend/AdminSide/4.adminAs/adminAs.html">
+        <a href="../admins/admin.html">
         <i class="fas fa-users"></i>
         Assessors
       </a>
       </div>
 
       <div class="nav-item" data-section="courses">
-        <a href="/Frontend/AdminSide/5.adminCourse/adminCourse.html">
+        <a href="../courses/course.html">
         <i class="fas fa-book"></i>
         Courses
       </a>
       </div>
 
       <div class="nav-item" data-section="files">
-        <a href="/Frontend/AdminSide/6.adminDocs/adminDocs.html">
+        <a href="../files/files.html">
         <i class="fas fa-file"></i>
         Files
       </a>
       </div>
 
       <div class="nav-item active" data-section="users">
-        <a href="/Frontend/AdminSide/7.adminUsers/adminUsers.html">
+        <a href="../users/users.html">
         <i class="fas fa-user"></i>
-        Users
+        Admins
       </a>
       </div>
 
       <div class="nav-item" data-section="logs">
-        <a href="/Frontend/AdminSide/8.adminLogs/adminLogs.html">
+        <a href="../activity/logs.html">
         <i class="fas fa-clock"></i>
         Activity Logs
       </a>
@@ -100,20 +100,19 @@
 
             <!-- Users Section -->
             <div id="usersSection" class="section active">
-              <div class="student-list">
+              <div class="admin-list">
                 <div class="table-header">
-                  <h2>All Users</h2>
-                  <button class="add-student-btn" onclick="openAssessorModal()">
+                  <h2>All Admins</h2>
+                  <button class="add-admin-btn" onclick="openadminModal()">
                     <i class="fas fa-plus"></i>
-                    Add User
+                    Add Admin
                   </button>
 
                 </div>
                 <table>
                   <thead>
                     <tr>
-                      <th>Role</th>
-                      <th>UID</th>
+                      <th>ID</th>
                       <th>Name</th>
                       <th>Email</th>
                       <th>Date Joined</th>
@@ -121,7 +120,7 @@
                       <th>Actions</th>
                     </tr>
                   </thead>
-                  <tbody id="allStudentsTableBody">
+                  <tbody id="adminTableBody">
                     <!-- Will be populated dynamically -->
                   </tbody>
                 </table>
@@ -129,42 +128,28 @@
             </div>
 
           
-  <!-- Assessor Modal -->
-  <div class="modal" id="assessorModal">
+  <!-- admin Modal -->
+  <div class="modal" id="adminModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 id="modalTitle">Add New Assessor</h2>
-        <button class="close-btn" onclick="closeAssessorModal()">&times;</button>
+        <h2 id="modalTitle">Add New Admin</h2>
+        <button class="close-btn" onclick="closeadminModal()">&times;</button>
       </div>
-      <form id="studentForm">
+      <form id="adminForm">
         <div class="form-group">
-          <label for="studentName">Full Name</label>
-          <input type="text" id="studentName" required />
+          <label for="adminName">Full Name</label>
+          <input type="text" id="adminName" required />
         </div>
         <div class="form-group">
-          <label for="studentEmail">Email</label>
-          <input type="email" id="studentEmail" required />
+          <label for="email">Email</label>
+          <input type="email" id="email" required />
         </div>
         <div class="form-group">
-          <label for="studentCourse">Type</label>
-          <select id="studentCourse" required>
-            <option value="">Internal Assessor</option>
-            <option value="">External Assessor</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="studentCourse">Field</label>
-          <select id="studentCourse" required>
-            <option value="">Choose Field</option>
-            <option value="">Information Technology</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="enrollmentDate">Temporary Password</label>
-          <input type="text" id="studentName" required />
+          <label for="password">Temporary Password</label>
+          <input type="text" id="password" required />
 
         </div>
-        <button type="submit" class="submit-btn">Create Assessor Account  </button>
+        <button type="submit" class="submit-btn">Create Admin Account  </button>
       </form>
     </div>
   </div>
@@ -246,6 +231,6 @@
 <div class="notification" id="notification" style="display: none;"></div>
 
 <script src="/frontend/shared/js/auth.js"></script>
-  <script src="/Frontend/AdminSide/7.adminUsers/adminUsers.js"></script>
+  <script src="./users.js"></script>
 </body>
 </html>
