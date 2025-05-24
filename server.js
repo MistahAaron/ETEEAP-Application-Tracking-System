@@ -1518,6 +1518,223 @@ app.get("/frontend/AdminSide/2.adminDash/admin.html", adminAuthMiddleware, (req,
   );
 });
 
+
+//FETCH  + CRUD ADMIN
+
+app.get("/api/admin/admins", adminAuthMiddleware, async (req, res) => {
+  try {
+    const requestingAdmin = await Admin.findById(req.admin.userId);
+  
+    if (!requestingAdmin.isSuperAdmin) {
+      return res.status(403).json({
+        success: false,
+        error: "Unauthorized - Only super admins can access this resource"
+      });
+    }
+
+    const admins = await Admin.find({})
+      .select('-password -__v')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      data: admins
+    });
+  } catch (error) {
+    console.error('Error fetching admins:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch admins'
+    });
+  }
+});
+
+
+// Get single admin by ID
+app.get("/api/admin/admins/:id", adminAuthMiddleware, async (req, res) => {
+  try {
+    const requestingAdmin = await Admin.findById(req.admin.userId);
+    const adminId = req.params.id;
+
+    // Only super admins can view other admin details
+    if (!requestingAdmin.isSuperAdmin && requestingAdmin._id.toString() !== adminId) {
+      return res.status(403).json({
+        success: false,
+        error: "Unauthorized - You can only view your own profile"
+      });
+    }
+
+    const admin = await Admin.findById(adminId)
+      .select('-password -__v');
+
+    if (!admin) {
+      return res.status(404).json({
+        success: false,
+        error: 'Admin not found'
+      });
+    }
+    res.status(200).json({
+      success: true,
+      data: admin
+    });
+  } catch (error) {
+    console.error('Error fetching admin:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch admin'
+    });
+  }
+});
+
+
+app.put("/api/admin/admins/:id", adminAuthMiddleware, async (req, res) => {
+  try {
+    const requestingAdmin = await Admin.findById(req.admin.userId);
+    const adminId = req.params.id;
+    const { fullName, email, isSuperAdmin } = req.body;
+
+    // Only super admins can modify other admins
+    if (!requestingAdmin.isSuperAdmin && requestingAdmin._id.toString() !== adminId) {
+      return res.status(403).json({
+        success: false,
+        error: "Unauthorized - You can only modify your own profile"
+      });
+    }
+
+    // Only super admins can change super admin status
+    if (isSuperAdmin !== undefined && !requestingAdmin.isSuperAdmin) {
+      return res.status(403).json({
+        success: false,
+        error: "Unauthorized - Only super admins can change admin privileges"
+      });
+    }
+
+    const updateData = { fullName, email };
+    if (isSuperAdmin !== undefined && requestingAdmin.isSuperAdmin) {
+      updateData.isSuperAdmin = isSuperAdmin;
+    }
+    const updatedAdmin = await Admin.findByIdAndUpdate(
+      adminId,
+      updateData,
+      { new: true, runValidators: true }
+    ).select('-password -__v');
+
+    if (!updatedAdmin) {
+      return res.status(404).json({
+        success: false,
+        error: 'Admin not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Admin updated successfully',
+      data: updatedAdmin
+    });
+  } catch (error) {
+    console.error('Error updating admin:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to update admin'
+    });
+  }
+});
+
+app.delete("/api/admin/admins/:id", adminAuthMiddleware, async (req, res) => {
+  try {
+    const requestingAdmin = await Admin.findById(req.admin.userId);
+    const adminId = req.params.id;
+
+    if (!requestingAdmin.isSuperAdmin) {
+      return res.status(403).json({
+        success: false,
+        error: "Unauthorized - Only super admins can delete admins"
+      });
+    }
+
+    // Prevent self-deletion
+    if (requestingAdmin._id.toString() === adminId) {
+      return res.status(400).json({
+        success: false,
+        error: "Cannot delete your own account"
+      });
+    }
+
+    const adminCount = await Admin.countDocuments({ isSuperAdmin: true });
+    const targetAdmin = await Admin.findById(adminId);
+
+    // Prevent deleting the last super admin
+    if (targetAdmin.isSuperAdmin && adminCount <= 1) {
+      return res.status(400).json({
+        success: false,
+        error: "Cannot delete the last super admin"
+      });
+    }
+
+    const deletedAdmin = await Admin.findByIdAndDelete(adminId);
+
+    if (!deletedAdmin) {
+      return res.status(404).json({
+        success: false,
+        error: 'Admin not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Admin deleted successfully'
+    });
+  } catch (error) {
+    console.error('Error deleting admin:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to delete admin'
+    });
+  }
+});
+
+
+// Change admin password
+app.put("/api/admin/admins/:id/change-password", adminAuthMiddleware, async (req, res) => {
+  try {
+    const requestingAdmin = await Admin.findById(req.admin.userId);
+    const adminId = req.params.id;
+    const { currentPassword, newPassword } = req.body;
+
+    // Only super admins or the account owner can change password
+    if (!requestingAdmin.isSuperAdmin && requestingAdmin._id.toString() !== adminId) {
+      return res.status(403).json({
+        success: false,
+        error: "Unauthorized - You can only change your own password"
+      });
+    }
+
+    if (!newPassword || newPassword.length < 8) {
+      return res.status(400).json({
+        success: false,
+        error: "New password must be at least 8 characters"
+      });
+    }
+
+    const admin = await Admin.findById(adminId);
+    if (!admin) {
+      return res.status(404).json({
+        success: false,
+        error: 'Admin not found'
+      });
+    }
+
+    // Verify current password for non-super admin requests
+    if (!requestingAdmin.isSuperAdmin || requestingAdmin._id.toString() === adminId) {
+      const isMatch = await bcrypt.compare(currentPassword, admin.password);
+      if (!isMatch) {
+        return res.status(401).json({
+          success: false,
+          error: "Current password is incorrect"
+        });
+      }
+    }
+    
 // In server.js, update the /api/admin/applicants route:
 app.get("/api/admin/applicants", adminAuthMiddleware, async (req, res) => {
   try {
